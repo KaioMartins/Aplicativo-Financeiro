@@ -1,4 +1,6 @@
 package br.com.javaparaweb.financeiro.util;
+import br.com.javaparaweb.financeiro.bolsa.acao.AcaoDAO;
+import br.com.javaparaweb.financeiro.bolsa.acao.AcaoDAOHibernate;
 import br.com.javaparaweb.financeiro.categoria.CategoriaDAO;
 import br.com.javaparaweb.financeiro.categoria.CategoriaDAOHibernate;
 import br.com.javaparaweb.financeiro.cheque.ChequeDAO;
@@ -41,5 +43,10 @@ public class DAOFactory {
 		return chequeDAO;
 	}
 
+	public static AcaoDAO criarAcaoDAO(){
+		AcaoDAOHibernate acaoDAO = new AcaoDAOHibernate();
+		acaoDAO.setSession(HibernateUtil.getSessionFactory().getCurrentSession());
+		return acaoDAO;
+	}
 
 }
