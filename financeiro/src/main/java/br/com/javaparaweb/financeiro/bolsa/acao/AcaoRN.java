@@ -2,7 +2,7 @@ package br.com.javaparaweb.financeiro.bolsa.acao;
 import java.util.*;
 import br.com.javaparaweb.financeiro.usuario.Usuario;
 import br.com.javaparaweb.financeiro.util.*;
-import br.com.javaparaweb.financeiro.util.YahooFinanceUtil;
+import br.com.javaparaweb.financeiro.web.util.YahooFinanceUtil;
 
 public class AcaoRN {
 	private AcaoDAO acaoDAO;
