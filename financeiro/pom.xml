@@ -47,6 +47,7 @@
 	</repositories>
 
 	<dependencies>
+
 		<!-- Java Server Faces -->
 		<dependency>
 			<groupId>javax</groupId>

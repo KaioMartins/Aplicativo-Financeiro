@@ -3,12 +3,9 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
-<ui:composition template="/templates/interna.xhtml">
-	<ui:define name="titulo">
-	Sistema de Controle Financeiro
-	</ui:define>
-<ui:define name="corpo">
-	
+<ui:composition template="/templates/externa.xhtml">
+	<ui:define name="corpo">
+
 	<h:form>
 		<h:commandLink action="#{usuarioBean.novo}">Novo usuário</h:commandLink>
 		<br/>

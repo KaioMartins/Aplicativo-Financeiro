@@ -13,7 +13,7 @@
 			always-use-default-target="true" 
 			default-target-url="/restrito/principal.jsf"
 			authentication-failure-url="/publico/login.jsf?login_error=1" />
-		<logout/> 
+		<logout  logout-success-url="/index.jsf"/> 
 		<remember-me /> 
 	</http>
 	<authentication-manager>
