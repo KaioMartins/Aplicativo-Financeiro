@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="extrato" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="19678977-5e30-47f5-9118-e081df128045">
+	<property name="ireport.zoom" value="1.331000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="195"/>
+	<style name="valorRegistro" forecolor="#009900">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($F{valor}.intValue()<0)]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="somaLancamentos" forecolor="#009900">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{somaLancamentos}<0)]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<style name="saldoFinal" isDefault="true" forecolor="#009900">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{saldoFinal}<0)]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="dataInicial" class="java.util.Date"/>
+	<parameter name="dataFinal" class="java.util.Date"/>
+	<parameter name="codigoUsuario" class="java.lang.Integer"/>
+	<parameter name="numeroConta" class="java.lang.Integer"/>
+	<parameter name="saldoAnterior" class="java.lang.Float"/>
+	<queryString>
+		<![CDATA[select usuario.nome, usuario.email,
+	usuario.celular, usuario.nascimento,
+	conta.conta, conta.descricao as des_conta,
+	lancamento.descricao as des_lanc, lancamento.data,
+	(lancamento.valor * categoria.fator) as valor
+from usuario, conta, lancamento, categoria
+where usuario.codigo = conta.usuario_codigo
+and conta.conta = lancamento.conta
+and lancamento.categoria = categoria.codigo
+and usuario.codigo = $P{codigoUsuario}
+and conta.conta = $P{numeroConta}
+and lancamento.data >= $P{dataInicial}
+and lancamento.data <= $P{dataFinal}]]>
+	</queryString>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="celular" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nascimento" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="conta" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="des_conta" class="java.lang.String"/>
+	<field name="des_lanc" class="java.lang.String"/>
+	<field name="data" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="somaLancamentos" class="java.lang.Double" resetType="Group" resetGroup="conta" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<variable name="saldoFinal" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{somaLancamentos}+$P{saldoAnterior}]]></variableExpression>
+	</variable>
+	<group name="conta">
+		<groupExpression><![CDATA[$F{conta}]]></groupExpression>
+		<groupHeader>
+			<band height="90">
+				<staticText>
+					<reportElement x="0" y="21" width="100" height="20" uuid="dfe54eae-b18b-49bb-9a41-d9e9bc33c96e"/>
+					<text><![CDATA[Período Relatório:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="41" width="100" height="20" uuid="8789f26a-a4a6-4f4d-a757-d1ff8e098b9e"/>
+					<text><![CDATA[Saldo Anterior:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="65" width="100" height="20" uuid="10b9b147-097a-42b4-bb0f-2bd52aadc48c"/>
+					<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="100" y="65" width="355" height="20" uuid="128e1340-b340-4a67-a413-88c8a602ca32"/>
+					<text><![CDATA[Descrição]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="455" y="65" width="100" height="20" uuid="194203e4-3f54-48eb-bd36-e7fc41ff7438"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Valor]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="183" y="21" width="30" height="20" uuid="ec2f480b-73b6-4e80-aa41-14d9bc13f7ce"/>
+					<text><![CDATA[a]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="100" y="21" width="83" height="20" uuid="7c3c2e4d-60ac-40b8-98c8-1fe3ce952aa0"/>
+					<textFieldExpression><![CDATA[$P{dataInicial}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="213" y="21" width="100" height="20" uuid="5ded86aa-01ba-4608-9e74-e5b716b1b8ea"/>
+					<textFieldExpression><![CDATA[$P{dataFinal}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="100" y="41" width="113" height="20" uuid="3594c60c-ce12-40d0-bbf7-a1d0eebc91b6"/>
+					<textFieldExpression><![CDATA[$P{saldoAnterior}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="63" width="555" height="1" uuid="96e8e36e-a1d7-4ef4-9b47-6903b9dea068"/>
+					<graphicElement>
+						<pen lineWidth="3.0"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement x="0" y="87" width="555" height="1" uuid="7b722e81-69ff-46f1-b856-cd3256271069"/>
+					<graphicElement>
+						<pen lineWidth="3.0"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#FFFFFF" backcolor="#000000" uuid="8d5bdb3f-9bd5-4fc2-bd51-1d17ade43951"/>
+					<textElement>
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{des_conta}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50">
+				<line>
+					<reportElement x="0" y="0" width="555" height="1" uuid="f662b48b-f94b-43a0-898b-2b6b65023477"/>
+					<graphicElement>
+						<pen lineWidth="3.0"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement x="235" y="1" width="220" height="20" uuid="9866c7e5-378a-4ef3-abf9-21162fb7d9a0"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Total de Lançamentos:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="235" y="21" width="220" height="20" uuid="d63bdf2b-0e69-4da8-9ece-be991dc4aac6"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Saldo Final (lançamentos + saldo anterior):]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="455" y="1" width="100" height="20" uuid="a1e222ad-1c30-44d7-904f-53b16e569513"/>
+					<textFieldExpression><![CDATA[$V{somaLancamentos}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤ #,##0.00">
+					<reportElement x="455" y="21" width="100" height="20" uuid="f1cc929b-3795-4ede-ace6-8b7f673258c7"/>
+					<textFieldExpression><![CDATA[$V{saldoFinal}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="84" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="159" height="79" uuid="b0bf42b0-441a-469b-b230-dd8ed071dfc2"/>
+				<textElement>
+					<font size="48"/>
+				</textElement>
+				<text><![CDATA[Extrato]]></text>
+			</staticText>
+			<image>
+				<reportElement x="159" y="0" width="396" height="79" uuid="d398ee60-7533-498b-a69c-438d55f721b4"/>
+				<imageExpression><![CDATA["D:\\Users\\Kaio\\OneDrive\\git\\Financeiro\\financeiro\\src\\main\\webapp\\resources\\imagens\\logotipo_g.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="80" width="555" height="1" uuid="73323ae2-1ba2-42e6-a61c-033b009b0650"/>
+				<graphicElement>
+					<pen lineWidth="5.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="81" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="de97e39a-c730-4ea2-a49f-415428fb05d1"/>
+				<text><![CDATA[Usuário:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="20" uuid="bc60f0f2-5f44-4b39-b095-3e3d0b0fcafe"/>
+				<text><![CDATA[Email:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="100" height="20" uuid="03392102-bfd6-4f9d-84b2-1a67c7e5c425"/>
+				<text><![CDATA[Celular:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="100" height="20" uuid="d0753742-115b-4b85-837f-48d15c83dd54"/>
+				<text><![CDATA[Data de Nascimento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="455" height="20" uuid="1ec403ea-e2fe-453d-8833-05e88394a4bb"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="20" width="455" height="20" uuid="c66bfc8f-a195-4b99-818e-9d524fd7d987"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="40" width="189" height="20" uuid="256ad0d0-4a6a-4ddb-889c-03bbf63b14bc"/>
+				<textFieldExpression><![CDATA[$F{celular}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="100" y="60" width="189" height="20" uuid="8845f345-0b8e-40bf-ac7b-f3ad3690df32"/>
+				<textFieldExpression><![CDATA[$F{nascimento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="1" width="555" height="20" forecolor="#FFFFFF" backcolor="#CCCCCC" uuid="be299199-93ae-454f-a08c-a45b5eb532a8">
+					<printWhenExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement style="valorRegistro" x="100" y="1" width="355" height="20" uuid="8d58d9b3-8e83-4e92-bc11-732225ce4a48"/>
+				<textFieldExpression><![CDATA[$F{des_lanc}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement style="valorRegistro" x="0" y="1" width="100" height="20" uuid="bcbd9b5e-2adc-4bda-93ca-778754211ff2"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00">
+				<reportElement x="455" y="1" width="100" height="20" uuid="43e84290-dc17-407a-aeae-eda00a161141"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="1d2c5307-6f16-45bf-8259-e9ba89a9d1e4"/>
+				<graphicElement>
+					<pen lineWidth="5.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="159" y="12" width="254" height="20" uuid="7aacc8b7-1fa8-454f-bc0a-f419c955f9ac"/>
+				<text><![CDATA[Parte integrante do livro Programação Java para a Web]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="69" y="34" width="100" height="20" uuid="caec10bc-2d58-4a54-b910-b3c23823dd98"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="34" width="100" height="20" uuid="8ade02d9-6bc4-460d-952e-0e44120db63e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="600" y="34" width="40" height="20" uuid="5967bf01-d1a7-4d0b-a87e-4503dfd9e47b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="393" y="34" width="62" height="20" uuid="a46d7661-31bb-4c8c-8fe7-e6d7cce1cd4f"/>
+				<text><![CDATA[Páginas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="34" width="69" height="20" uuid="9083ddf8-6509-4680-bfb8-2845c470bb12"/>
+				<text><![CDATA[Extraído em :]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
